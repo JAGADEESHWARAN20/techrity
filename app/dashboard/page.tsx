@@ -26,7 +26,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { LayoutList, LayoutGrid, X } from "lucide-react";
+import { LayoutList, LayoutGrid } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SortableItemProps {
