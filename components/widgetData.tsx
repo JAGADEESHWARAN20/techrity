@@ -12,7 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 // Import Framer Motion
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 import * as React from "react";
 import { Label, Pie, PieChart } from "recharts";
