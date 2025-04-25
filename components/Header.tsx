@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { PanelRightClose, Bell, Check } from "lucide-react";
+import { PanelRightClose, Bell} from "lucide-react";
 import {
   Popover,
   PopoverContent,
