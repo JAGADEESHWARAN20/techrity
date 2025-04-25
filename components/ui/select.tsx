@@ -44,7 +44,9 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-4 opacity-50" />
+        <div className="bg-violet-600 p-2 rounded-full">
+        <ChevronDownIcon color="white" className="size-4  " />
+        </div>
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )

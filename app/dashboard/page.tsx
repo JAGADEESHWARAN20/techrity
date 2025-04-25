@@ -10,6 +10,9 @@ import {
 import DashboardWidget from "@/components/DashboardWidget";
 import ManageWidgetsSheet from "@/components/ManageWidgetSheet"; // Updated import
 import { Widget, initialWidgets } from "@/components/widgetData";
+import Image from "next/image";
+import Imagebar from "@/public/image-bar.svg"
+import Images from "@/public/images.svg"
 import {
   DndContext,
   closestCenter,
@@ -26,7 +29,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { LayoutList, LayoutGrid } from "lucide-react";
+
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SortableItemProps {
@@ -225,17 +228,18 @@ export default function Dashboard() {
         <div className="flex gap-3">
           <Button
             onClick={() => setIsGridActive(false)}
-            className={`rounded-lg ${!isGridActive ? "bg-purple-300 text-purple-700 " : "bg-transparent text-gray-900"}`}
+            className={`rounded-lg ${!isGridActive ? "bg-purple-200 " : "bg-transparent text-gray-900"}`}
             aria-label="Switch to list view"
           >
-            <LayoutList />
+            <Image alt="widget" src={Imagebar}  />
           </Button>
           <Button
             onClick={() => setIsGridActive(true)}
-            className={`rounded-lg ${isGridActive ? "bg-purple-300 text-purple-700 " : "bg-transparent text-gray-900"}`}
+            className={`rounded-lg ${isGridActive ? "bg-purple-200 text-white" : "bg-transparent text-gray-900"}`}
             aria-label="Switch to grid view"
           >
-            <LayoutGrid />
+            <Image alt="widget" src={Images} />
+
           </Button>
           <Sheet>
             <SheetTrigger asChild>
@@ -260,13 +264,13 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="flex sm:flex-col items-center px-3 justify-between bg-[#6B21A8] text-white p-1 rounded-lg mb-2 headerdashboard">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 ">
+      <div className="flex sm:flex-col sm:items-start lg:flex-row lg:items-center px-3 py-3 justify-between bg-[#6B21A8] text-white p-1 rounded-lg mb-2 headerdashboard">
+        <div className="flex flex-col sm:flex-row lg:flex-row md:flex-col items-start sm:items-center gap-2 ">
           <span className="font-bold text-lg sm:text-md">Welcome Aboard, {process.env.NEXT_PUBLIC_USER_NAME || "User"} 👋</span>
-          <span className="text-sm sm:text-xs ">We’re thrilled to have you join Techrity Team!</span>
+          <span className="lg:text-lg md:text-md lg:pl-20 sm:text-xs ">We’re thrilled to have you join Techrity Team!</span>
         </div>
         <Button
-          className="bg-white text-purple-900 hover:bg-purple-400 rounded-lg py-2 px-4"
+          className="bg-white text-purple-900 hover:text-white cursor-pointer hover:border-white border-2 hover:bg-transparent rounded-lg py-2 px-4"
           aria-label="Update profile"
         >
           Update Profile

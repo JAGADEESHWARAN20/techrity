@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { SheetClose, SheetFooter } from "@/components/ui/sheet"; // Use Sheet components
-import { X } from "lucide-react";
+import { SheetClose, SheetFooter } from "@/components/ui/sheet";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface ManageWidgetsSheetProps {
   availableWidgets: { id: string; title: string }[];
@@ -28,36 +28,30 @@ const ManageWidgetsSheet = ({
     <div className="p-6 bg-white h-full">
       {/* Header with Title and Close Button */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-purple-900">Manage Widgets</h2>
-        <SheetClose asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="p-1 hover:bg-gray-100 rounded-full"
-            aria-label="Close manage widgets sheet"
-          >
-            <X className="h-5 w-5 text-gray-600" />
-          </Button>
-        </SheetClose>
+        <h2 className="text-[30px] font-extrabold text-violet-700">Manage Widgets</h2>
       </div>
 
       {/* Description */}
-      <p className="text-sm text-gray-600 mb-6">
+      <p className="text-xs sm:text-xs lg:text-lg text-left md:text-md font-['poppins'] text-gray-600 mb-6">
         Personalize your dashboard by managing widgets, add, remove, or reorder them to fit your workflow.
       </p>
 
       {/* Widget List */}
       <div className="space-y-3">
         {availableWidgets.map((widget) => (
-          <div key={widget.id} className="flex items-center">
-            <input
-              type="checkbox"
+          <div key={widget.id} className="flex items-center gap-3">
+            <Checkbox
               id={widget.id}
               checked={widgetSelections.includes(widget.id)}
-              onChange={() => handleCheckboxChange(widget.id)}
-              className="mr-3 h-5 w-5 text-purple-600 rounded focus:ring-purple-600"
+              onCheckedChange={() => handleCheckboxChange(widget.id)}
+              className="h-5 w-5 border-2 border-violet-600 data-[state=checked]:bg-violet-600 data-[state=checked]:border-violet-600"
             />
-            <label htmlFor={widget.id} className="text-gray-800">{widget.title}</label>
+            <label
+              htmlFor={widget.id}
+              className="text-gray-800 text-sm font-medium leading-none select-none cursor-pointer"
+            >
+              {widget.title}
+            </label>
           </div>
         ))}
       </div>

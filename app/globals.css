@@ -87,8 +87,10 @@
 
 /* Optionally, you can remove padding on the left specifically */
 .dashboard-grid {
-  padding-left: 0; /* Remove left padding */
-  padding-right: 1rem; /* Keep right padding if needed */
+  padding-left: 0;
+  /* Remove left padding */
+  padding-right: 1rem;
+  /* Keep right padding if needed */
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -219,6 +221,7 @@
   position: relative;
   z-index: 1;
 }
+
 /* Custom Scrollbar Class for Horizontal Scrolling */
 .custom-scrollbar {
   overflow-x: auto;
@@ -264,4 +267,3 @@
   display: none;
   /* Hide arrows at both ends */
 }
-
