@@ -88,7 +88,7 @@ export default function Home() {
           <h1 className="text-xl font-semibold text-purple-900">
             Welcome Aboard, Blessing! 🙌{" "}
             <span className="text-sm text-gray-600">
-              We're thrilled to have you join Techrity Team!
+              We&apos;re thrilled to have you join Techrity Team!
             </span>
           </h1>
           <motion.div
