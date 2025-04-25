@@ -11,6 +11,9 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+// Import Framer Motion
+import { motion, AnimatePresence } from "framer-motion";
+
 import * as React from "react";
 import { Label, Pie, PieChart } from "recharts";
 
@@ -45,7 +48,7 @@ interface ProgramData {
   tag: string;
   title: string;
   description: string;
-  mentors?: { id: string; avatarUrl: string }[]; // Already optional
+  mentors?: { id: string; avatarUrl: string }[];
   actionButton: "Analysis" | "Assign Mentor";
   hostedBy: { name: string; avatarUrl: string };
 }
@@ -151,7 +154,7 @@ const programsData: ProgramData[] = [
   {
     id: "program-1",
     imageUrl: "https://images.unsplash.com/photo-1726064855900-54128f083192?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    tag: "Bootcamp", // Will use #1E40AF (blue)
+    tag: "Bootcamp",
     title: "Fundamentals of User Interface & Experience",
     description: "This program is a hands-on guide designed for designers who want to master color theory and confidently apply it to their designs.",
     mentors: [
@@ -164,7 +167,7 @@ const programsData: ProgramData[] = [
   {
     id: "program-2",
     imageUrl: "https://images.unsplash.com/photo-1745177717290-9ce463cdc5e1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    tag: "Group Call", // Will use #166534 (green)
+    tag: "Group Call",
     title: "Colour Hack Practical",
     description: "This program is a hands-on guide designed for designers who want to master color theory and confidently apply it to their designs.",
     mentors: [],
@@ -174,7 +177,7 @@ const programsData: ProgramData[] = [
   {
     id: "program-3",
     imageUrl: "https://images.unsplash.com/photo-1744719258805-3bae36cda1ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    tag: "Group Call", // Will use #166534 (green)
+    tag: "Group Call",
     title: "Colour Hack Practical Group Call",
     description: "This program is a hands-on guide designed for designers who want to master color theory and confidently apply it to their designs.",
     mentors: [],
@@ -307,10 +310,10 @@ const recentActivitiesData: RecentActivityData[] = [
 ];
 
 const chartData = [
-  { category: "Students", users: 200, fill: "#60A5FA" }, // Blue
-  { category: "Mentors", users: 8, fill: "#A7F3D0" },   // Light Green
-  { category: "Programs", users: 22, fill: "#F9A8D4" }, // Pink
-  { category: "Others", users: 10, fill: "#FBBF24" },   // Orange
+  { category: "Students", users: 200, fill: "#60A5FA" },
+  { category: "Mentors", users: 8, fill: "#A7F3D0" },
+  { category: "Programs", users: 22, fill: "#F9A8D4" },
+  { category: "Others", users: 10, fill: "#FBBF24" },
 ];
 
 const chartConfig = {
@@ -454,18 +457,23 @@ export const UsersChart = () => {
 
 const ProgramCard: React.FC<{ program: ProgramData }> = ({ program }) => {
   const tagColors: Record<string, string> = {
-    Bootcamp: '#1E40AF', // Blue
-    'Group Call': '#166534', // Green
-    default: '#6B21A8', // Purple
+    Bootcamp: '#1E40AF',
+    'Group Call': '#166534',
+    default: '#6B21A8',
   };
 
   const tagColor = tagColors[program.tag] || tagColors.default;
 
-  // Debug: Log the tag and tagColor to confirm values
-  console.log(`Program: ${program.title}, Tag: ${program.tag}, TagColor: ${tagColor}`);
-
   return (
-    <div className="w-full rounded-xl shadow-md bg-card transition-transform duration-200 hover:shadow-lg overflow-hidden">
+    // Replace div with motion.div for animations
+    <motion.div
+      className="w-full rounded-xl shadow-md bg-card transition-transform duration-200 hover:shadow-lg overflow-hidden"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
       <div className="relative h-48">
         <Image
           src={program.imageUrl}
@@ -480,11 +488,11 @@ const ProgramCard: React.FC<{ program: ProgramData }> = ({ program }) => {
         </h3>
         <Badge
           className="absolute bottom-4 left-4 text-white text-sm px-3 py-1 rounded-full flex items-center gap-2 z-10"
-          style={{ backgroundColor: `${tagColor}` }} // Light blue with 30% opacity for Bootcamp
+          style={{ backgroundColor: `${tagColor}` }}
         >
           <span
             className="w-2 h-2 rounded-full animate-pulse"
-            style={{ backgroundColor: tagColor }} // Dark blue for Bootcamp
+            style={{ backgroundColor: tagColor }}
           ></span>
           {program.tag}
         </Badge>
@@ -492,7 +500,6 @@ const ProgramCard: React.FC<{ program: ProgramData }> = ({ program }) => {
       <div className="p-2">
         <p className="text-base text-muted-foreground line-clamp-4 mt-2">{program.description}</p>
         <div className="flex justify-between items-center mt-4 w-full gap-3">
-          {/* Mentors and Hosted By Container */}
           <div className="flex lg:flex-col sm:flex-row md:flex-row gap-3">
             {program.mentors && program.mentors.length > 0 && (
               <div className="flex items-center gap-3">
@@ -531,25 +538,28 @@ const ProgramCard: React.FC<{ program: ProgramData }> = ({ program }) => {
                 </div>
               )}
           </div>
-          {/* Buttons Container */}
           <div className="flex flex-row gap-2">
-            <Button
-              variant="outline"
-              className="min-w-[120px] px-4 py-2 border border-violet-400 text-primary hover:bg-primary/10 rounded-lg"
-              aria-label={`View details for ${program.title}`}
-            >
-              View Details
-            </Button>
-            <Button
-              className="min-w-[120px] px-4 py-2 bg-[#6B21A8] text-white hover:bg-[#5B1A99] rounded-lg"
-              aria-label={program.actionButton}
-            >
-              {program.actionButton}
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="outline"
+                className="min-w-[120px] px-4 py-2 border border-violet-400 text-primary hover:bg-primary/10 rounded-lg"
+                aria-label={`View details for ${program.title}`}
+              >
+                View Details
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                className="min-w-[120px] px-4 py-2 bg-[#6B21A8] text-white hover:bg-[#5B1A99] rounded-lg"
+                aria-label={program.actionButton}
+              >
+                {program.actionButton}
+              </Button>
+            </motion.div>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -561,7 +571,14 @@ const GroupCallCard: React.FC<{ call: GroupCallData }> = ({ call }) => {
     : "bg-violet-400 text-violet-700 hover:bg-violet-600";
 
   return (
-    <div className="w-full mx-2 md:w-full rounded-lg shadow-md bg-card transition-transform duration-200 hover:shadow-lg">
+    <motion.div
+      className="w-full mx-2 md:w-full rounded-lg shadow-md bg-card transition-transform duration-200 hover:shadow-lg"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
       <div className="relative h-[150px] sm:h-[200px] md:h-[250px] overflow-hidden">
         <Image
           src={call.imageUrl}
@@ -618,25 +635,36 @@ const GroupCallCard: React.FC<{ call: GroupCallData }> = ({ call }) => {
           </div>
         </div>
         <div className="flex gap-2 mt-4">
-          <Button
-            variant="outline"
-            className="flex-1 text-violet-600 outline-violet-600 hover:text-white hover:bg-violet-600"
-            aria-label={`View participants for ${call.title}`}
-          >
-            View Participants
-          </Button>
-          <Button className={`flex-1 bg-violet-600 text-white ${joinButtonClass}`} aria-label={`Join ${call.title}`}>
-            Join Now <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
-          </Button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              variant="outline"
+              className="flex-1 text-violet-600 outline-violet-600 hover:text-white hover:bg-violet-600"
+              aria-label={`View participants for ${call.title}`}
+            >
+              View Participants
+            </Button>
+          </motion.div>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button className={`flex-1 bg-violet-600 text-white ${joinButtonClass}`} aria-label={`Join ${call.title}`}>
+              Join Now <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
+            </Button>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
 const MentorCard: React.FC<{ mentor: MentorData }> = ({ mentor }) => {
   return (
-    <div className="flex items-center font-['poppins'] gap-3 p-3 rounded-lg bg-card">
+    <motion.div
+      className="flex items-center font-['poppins'] gap-3 p-3 rounded-lg bg-card"
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
       <Image
         src={mentor.avatarUrl}
         alt={mentor.name}
@@ -648,20 +676,29 @@ const MentorCard: React.FC<{ mentor: MentorData }> = ({ mentor }) => {
         <h3 className="text-lg font-bold text-card-foreground">{mentor.name}</h3>
         <p className="text-xs text-slate-400">{mentor.expertise}</p>
       </div>
-      <Button
-        variant="outline"
-        className="text-white font-semibold hover:bg-purple-400 bg-purple-600"
-        aria-label={`Message ${mentor.name}`}
-      >
-        Message
-      </Button>
-    </div>
+      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <Button
+          variant="outline"
+          className="text-white font-semibold hover:bg-purple-400 bg-purple-600"
+          aria-label={`Message ${mentor.name}`}
+        >
+          Message
+        </Button>
+      </motion.div>
+    </motion.div>
   );
 };
 
 const MentorApplicationCard: React.FC<{ application: MentorApplicationData }> = ({ application }) => {
   return (
-    <div className="flex flex-col items-start gap-2 p-1 rounded-lg bg-card font-['poppins']">
+    <motion.div
+      className="flex flex-col items-start gap-2 p-1 rounded-lg bg-card font-['poppins']"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
       <div className="flex lg:flex lg:flex-row md:flex-row sm:items-start sm:flex-col gap-1 justify-between lg:items-center w-full">
         <div className="flex items-center gap-2">
           <input
@@ -684,80 +721,96 @@ const MentorApplicationCard: React.FC<{ application: MentorApplicationData }> = 
         <div className="flex flex-col">
           <div className="flex justify-between">
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="text-destructive bg-red-200 border-red-400 hover:bg-red-300 text-xs"
-                aria-label={`Reject ${application.name}`}
-              >
-                Reject
-              </Button>
-              <Button
-                className="bg-purple-600 text-white hover:bg-purple-700 text-xs"
-                aria-label={`Accept ${application.name}`}
-              >
-                Accept
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  className="text-destructive bg-red-200 border-red-400 hover:bg-red-300 text-xs"
+                  aria-label={`Reject ${application.name}`}
+                >
+                  Reject
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  className="bg-purple-600 text-white hover:bg-purple-700 text-xs"
+                  aria-label={`Accept ${application.name}`}
+                >
+                  Accept
+                </Button>
+              </motion.div>
             </div>
           </div>
         </div>
       </div>
       <div className="flex flex-wrap gap-2 mt-2 text-nowrap">
-  <span className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-200 text-purple-800 rounded-md">
-    {application.role}
-  </span>
-  <span className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] px-2 sm:px-3 py-1 sm:py-1.5 bg-green-200 text-green-800 rounded-md">
-    {application.experience}
-  </span>
-  <span className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] px-2 sm:px-3 py-1 sm:py-1.5 bg-green-600 text-white rounded-md flex items-center">
-    <span className="mr-1">🇳🇬</span> {application.location}
-  </span>
-  <span className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] px-2 sm:px-3 py-1 sm:py-1.5 bg-gray-200 text-gray-800 rounded-md">
-    {application.timezone}
-  </span>
-</div>
-    </div>
+        <span className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-200 text-purple-800 rounded-md">
+          {application.role}
+        </span>
+        <span className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] px-2 sm:px-3 py-1 sm:py-1.5 bg-green-200 text-green-800 rounded-md">
+          {application.experience}
+        </span>
+        <span className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] px-2 sm:px-3 py-1 sm:py-1.5 bg-green-600 text-white rounded-md flex items-center">
+          <span className="mr-1">🇳🇬</span> {application.location}
+        </span>
+        <span className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] px-2 sm:px-3 py-1 sm:py-1.5 bg-gray-200 text-gray-800 rounded-md">
+          {application.timezone}
+        </span>
+      </div>
+    </motion.div>
   );
 };
 
 const StudentApplicationCard: React.FC<{ application: StudentApplicationData }> = ({ application }) => {
   return (
-    <div className="flex sm:flex-row items-center md:flex lg:flex border-b-slate-200 border-b items-center gap-2 p-1 rounded-lg bg-card font-['poppins']">
+    <motion.div
+      className="flex sm:flex-row items-center md:flex lg:flex border-b-slate-200 border-b items-center gap-2 p-1 rounded-lg bg-card font-['poppins']"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
       <div className="flex md:flex items-center lg:flex gap-2 w-full sm:flex">
-      <input
-        type="checkbox"
-        className="h-4 w-4 text-primary rounded focus:ring-primary"
-        aria-label={`Select ${application.name}`}
-      />
-      <Image
-        src={application.avatarUrl}
-        alt={application.name}
-        width={48}
-        height={48}
-        className="h-15 w-15 xs:w-15 xs:h-15  rounded-full ring-2 ring-card"
+        <input
+          type="checkbox"
+          className="h-4 w-4 text-primary rounded focus:ring-primary"
+          aria-label={`Select ${application.name}`}
         />
-      <div className="flex-1">
-        <h3 className="text-sm font-bold text-card-foreground">{application.name}</h3>
-        <p className="text-xs text-gray-400">{application.email}</p>
-      </div>
+        <Image
+          src={application.avatarUrl}
+          alt={application.name}
+          width={48}
+          height={48}
+          className="h-15 w-15 xs:w-15 xs:h-15 rounded-full ring-2 ring-card"
+        />
+        <div className="flex-1">
+          <h3 className="text-sm font-bold text-card-foreground">{application.name}</h3>
+          <p className="text-xs text-gray-400">{application.email}</p>
         </div>
-      <div className="flex gap-2">
-        <Button
-          variant="outline"
-          className="text-destructive bg-red-200 border-red-400 hover:bg-red-300 text-xs"
-          aria-label={`Reject ${application.name}`}
-        >
-          Reject
-        </Button>
-        <Button
-          className="bg-purple-600 text-white hover:bg-purple-700 text-xs"
-          aria-label={`Accept ${application.name}`}
-        >
-          Accept
-        </Button>
       </div>
-    </div>
+      <div className="flex gap-2">
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Button
+            variant="outline"
+            className="text-destructive bg-red-200 border-red-400 hover:bg-red-300 text-xs"
+            aria-label={`Reject ${application.name}`}
+          >
+            Reject
+          </Button>
+        </motion.div>
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Button
+            className="bg-purple-600 text-white hover:bg-purple-700 text-xs"
+            aria-label={`Accept ${application.name}`}
+          >
+            Accept
+          </Button>
+        </motion.div>
+      </div>
+    </motion.div>
   );
 };
+
 const GroupCallsWidget = () => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
@@ -780,27 +833,34 @@ const GroupCallsWidget = () => {
           ref={scrollRef}
           className="flex overflow-x-auto gap-2 snap-x snap-mandatory custom-scrollbar"
         >
-          {groupCallsData.map((call) => (
-            <div
+          {groupCallsData.map((call, index) => (
+            <motion.div
               key={call.id}
               className="flex-shrink-0 w-[90vw] mb-2 pb-2 sm:w-[400px] snap-center ml-1 first:ml-4 last:mr-4"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <GroupCallCard call={call} />
-            </div>
+            </motion.div>
           ))}
         </div>
-        <button
+        <motion.button
           onClick={scrollLeft}
           className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full opacity-20 shadow-md group-calls-prev"
+          whileHover={{ opacity: 0.8, scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
         >
           <ChevronLeft className="h-5 w-5 text-gray-600" />
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           onClick={scrollRight}
           className="absolute right-0 top-1/2 opacity-20 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-md group-calls-next"
+          whileHover={{ opacity: 0.8, scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
         >
           <ChevronRight className="h-5 w-5 text-gray-600" />
-        </button>
+        </motion.button>
       </div>
     </div>
   );
@@ -808,7 +868,13 @@ const GroupCallsWidget = () => {
 
 const RecentActivityCard: React.FC<{ activity: RecentActivityData }> = ({ activity }) => {
   return (
-    <div className="flex items-start gap-3">
+    <motion.div
+      className="flex items-start gap-3"
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ scale: 1.02 }}
+    >
       <Image
         src={activity.avatarUrl}
         alt={activity.title}
@@ -821,7 +887,7 @@ const RecentActivityCard: React.FC<{ activity: RecentActivityData }> = ({ activi
         <p className="text-md text-gray-400">{activity.description}</p>
         <p className="text-md text-gray-400 mt-1">{activity.timestamp}</p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -830,11 +896,18 @@ export const initialWidgets: Widget[] = [
     id: "programs",
     title: "Programs",
     content: (
-      <div className="flex flex-col space-y-4 h-full">
-        {programsData.map((program) => (
-          <ProgramCard key={program.id} program={program} />
+      <motion.div className="flex flex-col space-y-4 h-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        {programsData.map((program, index) => (
+          <motion.div
+            key={program.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <ProgramCard program={program} />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     ),
   },
   {
@@ -846,48 +919,83 @@ export const initialWidgets: Widget[] = [
     id: "applications",
     title: "Applications",
     content: (
-      <div className="flex flex-col space-y-3 h-full">
-      <h2 className="text-sm text-gray-500 font-['poppins'] mb-2">Mentors</h2>
-      <div className="grid grid-cols-1 gap-3">
-        {mentorApplicationsData.map((application) => (
-          <MentorApplicationCard key={application.id} application={application} />
-        ))}
-      </div>
-      <hr className="border-t border-gray-200 my-2" />
-      <h2 className="text-sm text-gray-500 font-['poppins'] mb-2">Students</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
-        {studentApplicationsData.map((application) => (
-          <StudentApplicationCard key={application.id} application={application} />
-        ))}
-      </div>
-    </div>
+      <motion.div className="flex flex-col space-y-3 h-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        <h2 className="text-sm text-gray-500 font-['poppins'] mb-2">Mentors</h2>
+        <div className="grid grid-cols-1 gap-3">
+          {mentorApplicationsData.map((application, index) => (
+            <motion.div
+              key={application.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <MentorApplicationCard application={application} />
+            </motion.div>
+          ))}
+        </div>
+        <hr className="border-t border-gray-200 my-2" />
+        <h2 className="text-sm text-gray-500 font-['poppins'] mb-2">Students</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+          {studentApplicationsData.map((application, index) => (
+            <motion.div
+              key={application.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <StudentApplicationCard application={application} />
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
     ),
   },
   {
     id: "mentors",
     title: "Mentors",
     content: (
-      <div className="flex flex-col space-y-3 h-full">
-        {mentorsData.map((mentor) => (
-          <MentorCard key={mentor.id} mentor={mentor} />
+      <motion.div className="flex flex-col space-y-3 h-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        {mentorsData.map((mentor, index) => (
+          <motion.div
+            key={mentor.id}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <MentorCard mentor={mentor} />
+          </motion.div>
         ))}
-        <Button className="px-3 py-8 bg-purple-300 text-[25px] text-purple-600 rounded-full">
-          See all
-        </Button>
-      </div>
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Button className="px-3 py-8 bg-purple-300 text-[25px] text-purple-600 rounded-full">
+            See all
+          </Button>
+        </motion.div>
+      </motion.div>
     ),
   },
   {
     id: "recentActivities",
     title: "Recent Activities",
     content: (
-      <div className="flex flex-col space-y-4 p-4 bg-white h-full">
+      <motion.div
+        className="flex flex-col space-y-4 p-4 bg-white h-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="flex flex-col space-y-3">
-          {recentActivitiesData.map((activity) => (
-            <RecentActivityCard key={activity.id} activity={activity} />
+          {recentActivitiesData.map((activity, index) => (
+            <motion.div
+              key={activity.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <RecentActivityCard activity={activity} />
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
     ),
   },
   {
