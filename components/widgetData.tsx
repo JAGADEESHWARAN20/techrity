@@ -10,8 +10,6 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-// Import Framer Motion
 import { motion } from "framer-motion";
 
 import * as React from "react";
@@ -500,7 +498,7 @@ const ProgramCard: React.FC<{ program: ProgramData }> = ({ program }) => {
       <div className="p-2">
         <p className="text-base text-muted-foreground line-clamp-4 mt-2">{program.description}</p>
         <div className="flex sm:flex-col lg:flex-row justify-between items-center md:flex-col mt-4 w-full gap-3">
-          <div className="flex  lg:flex-row sm:flex-col md:flex-row gap-3">
+          <div className="flex  lg:flex-col sm:flex-col md:flex-row gap-3">
             {program.mentors && program.mentors.length > 0 && (
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-3">
